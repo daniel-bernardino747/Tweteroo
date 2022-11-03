@@ -1,46 +1,13 @@
 [
-  {
-    "username": "bobesponja1",
-    "tweet": "eu amo o hub"
-  },
-  {
-    "username": "bobesponja2",
-    "tweet": "eu amo o hub"
-  },
-  {
-    "username": "bobesponja3",
-    "tweet": "eu amo o hub"
-  },
-  {
-    "username": "bobesponja4",
-    "tweet": "eu amo o hub"
-  },
-  {
-    "username": "bobesponja5",
-    "tweet": "eu amo o hub"
-  },
-  {
-    "username": "bobesponja6",
-    "tweet": "eu amo o hub"
-  },
-  {
-    "username": "bobesponja7",
-    "tweet": "eu amo o hub"
-  },
-  {
-    "username": "bobesponja8",
-    "tweet": "eu amo o hub"
-  },
-  {
-    "username": "bobesponja9",
-    "tweet": "eu amo o hub"
-  },
-  {
-    "username": "bobesponja10",
-    "tweet": "eu amo o hub"
-  },
-  {
-    "username": "bobesponja11",
-    "tweet": "eu amo o hub"
-  }
+  { "username": "bobesponja", "tweet": "eu amo o hub" },
+  { "username": "bobesponja2", "tweet": "eu amo o hub" },
+  { "username": "bobesponja3", "tweet": "eu amo o hub" },
+  { "username": "bobesponja4", "tweet": "eu amo o hub" },
+  { "username": "bobesponja5", "tweet": "eu amo o hub" },
+  { "username": "bobesponja", "tweet": "eu amo o hub" },
+  { "username": "bobesponja7", "tweet": "eu amo o hub" },
+  { "username": "bobesponja8", "tweet": "eu amo o hub" },
+  { "username": "bobesponja9", "tweet": "eu amo o hub" },
+  { "username": "bobesponja10", "tweet": "eu amo o hub" },
+  { "username": "bobesponja11", "tweet": "eu amo o hub" }
 ]
