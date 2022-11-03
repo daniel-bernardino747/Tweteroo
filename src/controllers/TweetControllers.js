@@ -6,12 +6,9 @@ function index(request, response) {
   const pathUsersData = 'src/datas/usersData.json';
   const encoding = 'utf-8';
   let latestTweets;
-  let allUsers;
 
-  fs.readFile(pathUsersData, encoding, (error, fd) => {
-    if (error) throw error;
-    allUsers = JSON.parse(fd);
-  });
+  const fd = fs.readFileSync(pathUsersData, encoding);
+  const allUsers = JSON.parse(fd);
 
   fs.readFile(pathTweetsData, encoding, (err, data) => {
     if (err) throw err;
