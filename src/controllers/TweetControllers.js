@@ -1,21 +1,39 @@
 import fs from 'fs';
 
 function index(request, response) {
-  const pathData = 'src/database.json';
+  const undefinedUserImage = 'https://secure.gravatar.com/avatar/a2bbf191a58629f141850123542fefc5?s=96&d=https%3A%2F%2Fstatic.teamtreehouse.com%2Fassets%2Fcontent%2Fdefault_avatar-ea7cf6abde4eec089a4e03cc925d0e893e428b2b6971b12405a9b118c837eaa2.png&r=pg';
+  const pathTweetsData = 'src/datas/tweetsData.json';
+  const pathUsersData = 'src/datas/usersData.json';
   const encoding = 'utf-8';
+  let latestTweets;
+  let allUsers;
 
-  fs.readFile(pathData, encoding, (err, data) => {
+  fs.readFile(pathUsersData, encoding, (error, fd) => {
+    if (error) throw error;
+    allUsers = JSON.parse(fd);
+  });
+
+  fs.readFile(pathTweetsData, encoding, (err, data) => {
     if (err) throw err;
 
     const allTweets = JSON.parse(data);
     const smallDatabase = allTweets.length <= 10;
-    let latestTweets;
 
     (smallDatabase)
       ? latestTweets = allTweets
       : latestTweets = allTweets.slice(allTweets.length - 10);
 
-    response.send(latestTweets);
+    const renderTweets = latestTweets
+      .map((tweet) => {
+        const tweetUser = allUsers.find((user) => user.username === tweet.username);
+
+        if (!tweetUser) {
+          return { ...tweet, avatar: undefinedUserImage };
+        }
+        return { ...tweet, avatar: tweetUser.avatar };
+      });
+
+    response.send(renderTweets);
   });
 }
 
