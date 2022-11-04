@@ -1,6 +1,7 @@
 import fs from 'fs';
 
 function index(request, response) {
+  const { page } = request.query;
   const undefinedUserImage = 'https://secure.gravatar.com/avatar/a2bbf191a58629f141850123542fefc5?s=96&d=https%3A%2F%2Fstatic.teamtreehouse.com%2Fassets%2Fcontent%2Fdefault_avatar-ea7cf6abde4eec089a4e03cc925d0e893e428b2b6971b12405a9b118c837eaa2.png&r=pg';
   const pathTweetsData = 'src/datas/tweetsData.json';
   const pathUsersData = 'src/datas/usersData.json';
@@ -14,9 +15,18 @@ function index(request, response) {
   const allTweets = JSON.parse(data);
   const smallDatabase = allTweets.length <= 10;
 
-  (smallDatabase)
-    ? latestTweets = allTweets
-    : latestTweets = allTweets.slice(allTweets.length - 10);
+  if (smallDatabase) {
+    latestTweets = allTweets;
+  } else if (page) {
+    latestTweets = allTweets.filter((tweet) => {
+      const position = allTweets.indexOf(tweet);
+      const nextTweets = ((page - 1) * 10) < position && position <= (page * 10);
+
+      return nextTweets;
+    });
+  } else {
+    latestTweets = allTweets.slice(allTweets.length - 10);
+  }
 
   const renderTweets = latestTweets
     .map((tweet) => {
