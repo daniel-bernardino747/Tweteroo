@@ -1,24 +1,17 @@
-import fs from 'fs';
+import userDatabase from '../datas/usersData.js';
+import tweetsDatabase from '../datas/tweetsData.js';
 
 function showUser(request, response) {
   const { user } = request.params;
 
-  const pathUsers = './src/datas/usersData.json';
-  const pathTweetsData = 'src/datas/tweetsData.json';
-  const encoding = 'utf-8';
-
   try {
-    const fd = fs.readFileSync(pathUsers, encoding);
-    const allUsers = JSON.parse(fd);
-    const requestedUser = allUsers.find((account) => account.username === user);
+    const requestedUser = userDatabase.find((account) => account.username === user);
 
     if (!requestedUser) {
       return response.status(400).json('There was a problem finding this user.');
     }
 
-    const data = fs.readFileSync(pathTweetsData, encoding);
-    const allTweets = JSON.parse(data);
-    const userTweets = allTweets.filter((tweet) => tweet.username === user);
+    const userTweets = tweetsDatabase.filter((tweet) => tweet.username === user);
     const renderTweets = userTweets.map((tweet) => ({ ...tweet, avatar: requestedUser.avatar }));
 
     return response.status(200).send(renderTweets);
@@ -41,20 +34,12 @@ function makeLogin(request, response) {
   }
 
   try {
-    const pathTweets = './src/datas/usersData.json';
-    const encoding = 'utf-8';
-
-    const data = fs.readFileSync(pathTweets, encoding);
-    const allUsers = JSON.parse(data);
-
-    const existingUser = allUsers.find((account) => account.username === username);
+    const existingUser = userDatabase.find((account) => account.username === username);
 
     if (existingUser) {
       return response.status(409).json('This user already exists.');
     }
-    allUsers.push(request.body);
-    const updateUsers = JSON.stringify(allUsers);
-    fs.writeFileSync(pathTweets, updateUsers);
+    userDatabase.push(request.body);
 
     return response.status(201).send('OK');
   } catch (err) {
