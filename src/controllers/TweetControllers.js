@@ -44,7 +44,7 @@ function index(request, response) {
       });
     return response.status(200).send(renderTweets);
   } catch (err) {
-    return response.status(400).json({ error: err.message });
+    return response.status(400).json(err.message);
   }
 }
 
@@ -73,7 +73,7 @@ function sendMessage(request, response) {
 
     return response.status(201).send('OK');
   } catch (err) {
-    return response.status(400).json({ error: err.message });
+    return response.status(400).json(err.message);
   }
 }
 

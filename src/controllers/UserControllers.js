@@ -13,7 +13,7 @@ function showUser(request, response) {
     const requestedUser = allUsers.find((account) => account.username === user);
 
     if (!requestedUser) {
-      return response.status(400).json({ error: 'There was a problem finding this user.' });
+      return response.status(400).json('There was a problem finding this user.');
     }
 
     const data = fs.readFileSync(pathTweetsData, encoding);
@@ -23,7 +23,7 @@ function showUser(request, response) {
 
     return response.status(200).send(renderTweets);
   } catch (err) {
-    return response.status(400).json({ error: err.message });
+    return response.status(400).json(err.message);
   }
 }
 
@@ -31,13 +31,13 @@ function makeLogin(request, response) {
   const { username, avatar } = request.body;
 
   if (!avatar || !username) {
-    return response.status(400).json({ error: 'Missing username or tweet.' });
+    return response.status(400).json('Missing username or tweet.');
   }
 
   try {
     const url = new URL(avatar);
   } catch (err) {
-    return response.status(404).json({ error: 'Invalid URL' });
+    return response.status(404).json('Invalid URL');
   }
 
   try {
@@ -50,7 +50,7 @@ function makeLogin(request, response) {
     const existingUser = allUsers.find((account) => account.username === username);
 
     if (existingUser) {
-      return response.status(409).json({ error: 'This user already exists.' });
+      return response.status(409).json('This user already exists.');
     }
     allUsers.push(request.body);
     const updateUsers = JSON.stringify(allUsers);
@@ -58,7 +58,7 @@ function makeLogin(request, response) {
 
     return response.status(201).send('OK');
   } catch (err) {
-    return response.status(400).json({ error: err.message });
+    return response.status(400).json(err.message);
   }
 }
 
