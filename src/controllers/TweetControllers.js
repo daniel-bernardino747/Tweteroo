@@ -14,37 +14,38 @@ function index(request, response) {
   const encoding = 'utf-8';
   let latestTweets;
 
-  const fd = fs.readFileSync(pathUsersData, encoding);
-  const allUsers = JSON.parse(fd);
+  try {
+    const fd = fs.readFileSync(pathUsersData, encoding);
+    const data = fs.readFileSync(pathTweetsData, encoding);
+    const allTweets = JSON.parse(data);
+    const allUsers = JSON.parse(fd);
+    const smallDatabase = allTweets.length <= 10;
 
-  const data = fs.readFileSync(pathTweetsData, encoding);
-  const allTweets = JSON.parse(data);
-  const smallDatabase = allTweets.length <= 10;
+    if (smallDatabase) {
+      latestTweets = allTweets;
+    } else if (page) {
+      latestTweets = allTweets.filter((tweet) => {
+        const position = allTweets.indexOf(tweet);
+        const nextTweets = ((page - 1) * 10) < position && position <= (page * 10);
 
-  if (smallDatabase) {
-    latestTweets = allTweets;
-  } else if (page) {
-    latestTweets = allTweets.filter((tweet) => {
-      const position = allTweets.indexOf(tweet);
-      const nextTweets = ((page - 1) * 10) < position && position <= (page * 10);
+        return nextTweets;
+      });
+    } else {
+      latestTweets = allTweets.slice(allTweets.length - 10);
+    }
+    const renderTweets = latestTweets
+      .map((tweet) => {
+        const tweetUser = allUsers.find((user) => user.username === tweet.username);
 
-      return nextTweets;
-    });
-  } else {
-    latestTweets = allTweets.slice(allTweets.length - 10);
+        if (!tweetUser) {
+          return { ...tweet, avatar: undefinedUserImage };
+        }
+        return { ...tweet, avatar: tweetUser.avatar };
+      });
+    return response.status(200).send(renderTweets);
+  } catch (err) {
+    return response.status(400).json({ error: err.message });
   }
-
-  const renderTweets = latestTweets
-    .map((tweet) => {
-      const tweetUser = allUsers.find((user) => user.username === tweet.username);
-
-      if (!tweetUser) {
-        return { ...tweet, avatar: undefinedUserImage };
-      }
-      return { ...tweet, avatar: tweetUser.avatar };
-    });
-
-  response.send(renderTweets);
 }
 
 function sendMessage(request, response) {
