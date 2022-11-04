@@ -49,10 +49,14 @@ function index(request, response) {
 }
 
 function sendMessage(request, response) {
-  const { username, tweet } = request.body;
+  const { tweet } = request.body;
+  const { user } = request.headers;
 
-  if (!tweet || !username) {
-    return response.status(400).json({ error: 'Missing username or tweet.' });
+  if (!tweet) {
+    return response.status(400).json('Missing tweet.');
+  }
+  if (!user) {
+    return response.status(400).json('Missing username.');
   }
 
   try {
