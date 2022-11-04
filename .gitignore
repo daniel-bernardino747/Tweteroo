@@ -2,11 +2,5 @@
 node_modules/
 .eslintrc.json
 
-# front-end
-index.html
-css/
-assets/
-script.js
-
 # Config
 .vscode/
