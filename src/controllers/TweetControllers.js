@@ -4,7 +4,7 @@ function index(request, response) {
   const { page } = request.query;
   const firstPage = 1;
 
-  if (page <= firstPage) {
+  if (page < firstPage) {
     return response.status(400).json('enter a valid page.');
   }
 
@@ -63,7 +63,7 @@ function sendMessage(request, response) {
     const pathTweets = './src/datas/tweetsData.json';
     const encoding = 'utf-8';
 
-    const data = fs.readFile(pathTweets, encoding);
+    const data = fs.readFileSync(pathTweets, encoding);
 
     const allTweets = JSON.parse(data);
     allTweets.push(request.body);
