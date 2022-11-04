@@ -41,8 +41,28 @@ function makeLogin(request, response) {
   }
 }
 
-function showUser() {
-  return true;
+function showUser(request, response) {
+  const { user } = request.params;
+
+  const pathUsers = './src/datas/usersData.json';
+  const pathTweetsData = 'src/datas/tweetsData.json';
+  const encoding = 'utf-8';
+
+  const fd = fs.readFileSync(pathUsers, encoding);
+  const allUsers = JSON.parse(fd);
+  const requestedUser = allUsers.find((account) => account.username === user);
+  console.log(requestedUser);
+
+  if (!requestedUser) {
+    return response.status(400).json({ error: 'There was a problem finding this user.' });
+  }
+
+  const data = fs.readFileSync(pathTweetsData, encoding);
+  const allTweets = JSON.parse(data);
+  const userTweets = allTweets.filter((tweet) => tweet.username === user);
+  const renderTweets = userTweets.map((tweet) => ({ ...tweet, avatar: requestedUser.avatar }));
+
+  response.send(renderTweets);
 }
 
 export { makeLogin, showUser };

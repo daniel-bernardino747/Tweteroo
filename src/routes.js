@@ -8,7 +8,7 @@ routes.get('/tweets', index);
 
 routes.post('/tweets', sendMessage);
 
-routes.post('/tweets/:user', showUser);
+routes.get('/tweets/:user', showUser);
 
 routes.post('/sign-up', makeLogin);
 
