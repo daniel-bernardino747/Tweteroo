@@ -2,6 +2,12 @@ import fs from 'fs';
 
 function index(request, response) {
   const { page } = request.query;
+  const firstPage = 1;
+
+  if (page <= firstPage) {
+    return response.status(400).json('enter a valid page.');
+  }
+
   const undefinedUserImage = 'https://secure.gravatar.com/avatar/a2bbf191a58629f141850123542fefc5?s=96&d=https%3A%2F%2Fstatic.teamtreehouse.com%2Fassets%2Fcontent%2Fdefault_avatar-ea7cf6abde4eec089a4e03cc925d0e893e428b2b6971b12405a9b118c837eaa2.png&r=pg';
   const pathTweetsData = 'src/datas/tweetsData.json';
   const pathUsersData = 'src/datas/usersData.json';
