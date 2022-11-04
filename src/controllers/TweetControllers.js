@@ -10,28 +10,25 @@ function index(request, response) {
   const fd = fs.readFileSync(pathUsersData, encoding);
   const allUsers = JSON.parse(fd);
 
-  fs.readFile(pathTweetsData, encoding, (err, data) => {
-    if (err) throw err;
+  const data = fs.readFileSync(pathTweetsData, encoding);
+  const allTweets = JSON.parse(data);
+  const smallDatabase = allTweets.length <= 10;
 
-    const allTweets = JSON.parse(data);
-    const smallDatabase = allTweets.length <= 10;
+  (smallDatabase)
+    ? latestTweets = allTweets
+    : latestTweets = allTweets.slice(allTweets.length - 10);
 
-    (smallDatabase)
-      ? latestTweets = allTweets
-      : latestTweets = allTweets.slice(allTweets.length - 10);
+  const renderTweets = latestTweets
+    .map((tweet) => {
+      const tweetUser = allUsers.find((user) => user.username === tweet.username);
 
-    const renderTweets = latestTweets
-      .map((tweet) => {
-        const tweetUser = allUsers.find((user) => user.username === tweet.username);
+      if (!tweetUser) {
+        return { ...tweet, avatar: undefinedUserImage };
+      }
+      return { ...tweet, avatar: tweetUser.avatar };
+    });
 
-        if (!tweetUser) {
-          return { ...tweet, avatar: undefinedUserImage };
-        }
-        return { ...tweet, avatar: tweetUser.avatar };
-      });
-
-    response.send(renderTweets);
-  });
+  response.send(renderTweets);
 }
 
 function sendMessage(request, response) {
