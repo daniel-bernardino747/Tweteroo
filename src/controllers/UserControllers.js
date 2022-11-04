@@ -17,25 +17,18 @@ function makeLogin(request, response) {
     const pathTweets = './src/datas/usersData.json';
     const encoding = 'utf-8';
 
-    fs.readFile(pathTweets, encoding, (err, data) => {
-      if (err) throw err;
+    const data = fs.readFile(pathTweets, encoding);
+    const allUsers = JSON.parse(data);
 
-      const allUsers = JSON.parse(data);
+    const existingUser = allUsers.find((account) => account.username === username);
 
-      const existingUser = allUsers.find((account) => account.username === username);
-
-      console.log(existingUser);
-
-      if (!existingUser) {
-        allUsers.push(request.body);
-        const updateUsers = JSON.stringify(allUsers);
-        fs.writeFile(pathTweets, updateUsers, (error) => {
-          if (error) throw error;
-        });
-        return response.status(201).send('OK');
-      }
-      return response.status(409).json({ error: 'This user already exists.' });
-    });
+    if (!existingUser) {
+      allUsers.push(request.body);
+      const updateUsers = JSON.stringify(allUsers);
+      fs.writeFileSync(pathTweets, updateUsers);
+      return response.status(201).send('OK');
+    }
+    return response.status(409).json({ error: 'This user already exists.' });
   } catch (err) {
     return response.status(400).json({ error: err.message });
   }

@@ -58,18 +58,13 @@ function sendMessage(request, response) {
     const pathTweets = './src/datas/tweetsData.json';
     const encoding = 'utf-8';
 
-    fs.readFile(pathTweets, encoding, (err, data) => {
-      if (err) throw err;
+    const data = fs.readFile(pathTweets, encoding);
 
-      const allTweets = JSON.parse(data);
-      allTweets.push(request.body);
+    const allTweets = JSON.parse(data);
+    allTweets.push(request.body);
 
-      const updateTweets = JSON.stringify(allTweets);
-
-      fs.writeFile(pathTweets, updateTweets, (error) => {
-        if (error) throw error;
-      });
-    });
+    const updateTweets = JSON.stringify(allTweets);
+    fs.writeFileSync(pathTweets, updateTweets);
 
     return response.status(201).send('OK');
   } catch (err) {
